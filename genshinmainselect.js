@@ -247,7 +247,7 @@ module.exports.Create = function (client) {
 			if (channel) {
 				let EMBED = new MessageEmbed()
 					.setColor('#eb7b36')
-					.setTitle('(Optional) Character roles')
+					.setTitle('(Optional) Character roles.')
 					.setDescription('Choose a Genshin character to display next to your name.')
 					.setThumbnail('https://cdn.discordapp.com/attachments/925162470107123752/981845568567513099/Icon_Emoji_054_Ganyu_No_touching21.png');
 				let TeyvatSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Teyvat').setPlaceholder('Teyvat').setMinValues(0).setMaxValues(1).addOptions(Teyvat);
