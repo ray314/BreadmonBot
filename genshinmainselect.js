@@ -31,8 +31,8 @@ const ACTIONROW_2 = [
 module.exports.Create = function (client) {
 	client.on('messageCreate', async (message) => {
 		const msg = message.content.toLowerCase();
-		// Check to see if user has privledges if (!(message.member.roles.cache.has('925164302082662460') || message.member.roles.cache.has('925163038712135700') || message.member.roles.cache.has('925160493709131826'))) return;
-		if (!(message.member.roles.cache.has('913368575102828564'))) return;
+		// Check to see if user has privledges 
+		if (!(message.member.roles.cache.has('925164302082662460') || message.member.roles.cache.has('925163038712135700') || message.member.roles.cache.has('925160493709131826'))) return;
 
 		if (msg === ".characterroles-send") {
 			client.channels.cache.get(CHANNEL_ID).send({embeds:[EMBED],components:ACTIONROW_1});
