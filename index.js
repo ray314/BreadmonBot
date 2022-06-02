@@ -2,6 +2,7 @@ require('dotenv').config();
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { Intents, Client } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
+const RoleSelect = require('./genshinmainselect.js');
 const Teyvat = [
   {
     label: "Aether",
@@ -251,139 +252,8 @@ const Khaenriah = [
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
   client.user.setActivity(':PaimogemsRain:', { type: 'LISTENING' });
-  this.Create(client);
+  
+  RoleSelect.Create(client);
 });
-
-module.exports.Create = function (client) {
-  client.on('ready', () => {
-    client.channels.fetch('925168032274350130').then(channel => {
-      if (channel) {
-        let EMBED = new MessageEmbed()
-          .setColor('#eb7b36')
-          .setTitle('(Optional) Character roles')
-          .setDescription('Choose a Genshin character to display next to your name.')
-          .setThumbnail('https://media.discordapp.net/attachments/484247847383072771/981468208307503134/xiao.png');
-        let TeyvatSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Teyvat').setPlaceholder('Teyvat').setMinValues(0).setMaxValues(1).addOptions(Teyvat);
-        let MondstadtSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Mondstadt').setPlaceholder('Mondstadt').setMinValues(0).setMaxValues(1).addOptions(Mondstadt);
-        let LiyueSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Liyue').setPlaceholder('Liyue').setMinValues(0).setMaxValues(1).addOptions(Liyue);
-        let InazumaSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Inazuma').setPlaceholder('Inazuma').setMinValues(0).setMaxValues(1).addOptions(Inazuma);
-        let SneznayaSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sneznaya').setPlaceholder('Sheznaya').setMinValues(0).setMaxValues(1).addOptions(Sneznaya);
-
-        channel.send({ embeds: [EMBED], components: [new MessageActionRow().addComponents(TeyvatSelect), new MessageActionRow().addComponents(MondstadtSelect), new MessageActionRow().addComponents(LiyueSelect), new MessageActionRow().addComponents(InazumaSelect), new MessageActionRow().addComponents(SneznayaSelect)] });
-
-        // STEP 2: The other 4 menus will have to go into another message. To add a region uncomment the Select variable, then uncomment the channel.send call and whichever regions to be sent.
-        // This adds the select menu component to the message which gets sent.
-
-        //let SumeruSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sumeru').setPlaceholder('Sumeru').setMinValues(0).setMaxValues(1).addOptions(Sumeru);
-        //let FontaineSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Fontaine').setPlaceholder('Fontaine').setMinValues(0).setMaxValues(1).addOptions(Fontaine);
-        //let NatlanSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Natlan').setPlaceholder('Natlan').setMinValues(0).setMaxValues(1).addOptions(Natlan);
-        //let KhaenriahSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Khaenriah').setPlaceholder('Khaenri\'ah').setMinValues(0).setMaxValues(1).addOptions(Khaenriah);
-
-        //channel.send({components:[new MessageActionRow().addComponents(SumeruSelect)
-        //, new MessageActionRow().addComponents(FontaineSelect)
-        //, new MessageActionRow().addComponents(NatlanSelect)
-        //, new MessageActionRow().addComponents(KhaenriahSelect)
-        //]});
-
-      }
-    });
-  });
-
-  client.on('interactionCreate', async interaction => {
-    if (!interaction.isMessageComponent() || !interaction.customId.includes('genshinMainRoleGiver')) return;
-
-    let memberRoles = interaction.member.roles.cache;
-    if (!memberRoles) return;
-    let selectValues = interaction.values;
-    if (!selectValues) return;
-
-    // WELCOME TO FOR LOOP HELL
-    for (const roleOption of Teyvat) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Mondstadt) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Liyue) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Inazuma) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Sneznaya) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-    // STEP 3: Uncomment the region's for loop
-    // This makes it so whenever a user chooses a new role, it will iterate the character list to check if they have roles that need to be removed.
-
-    /*
-    for (const roleOption of Sumeru) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Fontaine) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Natlan) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }
-
-    for (const roleOption of Khaenriah) {
-      if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
-        let role = await interaction.guild.roles.fetch(roleOption.value);
-        interaction.member.roles.remove(role);
-      }
-    }*/
-
-    if (interaction.values.length < 1) {
-      if (interaction.replied) {
-        interaction.editReply({ content: 'Removed Character Icon', ephemeral: true });
-      } else {
-        interaction.reply({ content: 'Removed Character Icon', ephemeral: true });
-      }
-      return;
-    }
-
-    for (const value of selectValues) {
-      let role = await interaction.guild.roles.fetch(value);
-      interaction.member.roles.add(role);
-    }
-
-    if (interaction.replied) {
-      interaction.editReply({ content: 'Updated Character Icon', ephemeral: true });
-    } else {
-      interaction.reply({ content: 'Updated Character Icon', ephemeral: true });
-    }
-  });
-}
 
 client.login(process.env.TOKEN);
