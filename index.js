@@ -13,6 +13,10 @@ client.on("ready", () => {
   client.user.setActivity(':PaimogemsRain:', { type: 'LISTENING' });
 });
 
+client.on('error', error => {
+	console.log("Discord Error:\n"+error);
+});
+
 client.login(process.env.TOKEN);
 
 app.listen(port, () => {

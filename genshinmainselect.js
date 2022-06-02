@@ -1,12 +1,11 @@
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
-const CHANNEL_ID = '981900802144747520';
+const CHANNEL_ID = '925168032274350130';
 const ROLES = require('./roles.json').CHARACTER_ROLES;
-const EMBED_TITLE = "(Optional) Character roles.";
 
 // Embed for Character roles
 const EMBED = new MessageEmbed()
 .setColor('#eb7b36')
-.setTitle(EMBED_TITLE)
+.setTitle('(Optional) Character roles.')
 .setDescription('Choose a Genshin character to display next to your name.')
 .setThumbnail('https://cdn.discordapp.com/attachments/925162470107123752/981845568567513099/Icon_Emoji_054_Ganyu_No_touching21.png');
 
@@ -40,14 +39,19 @@ module.exports.Create = function (client) {
 			//client.channels.cache.get(CHANNEL_ID).send({components:ACTIONROW_2});
 		} else if (msg === ".characterroles-update") {
 			// Searches through all messages and components in roles channel to find one that has matching SelectMenuIDs. Then it updates the components to the new configuration.
-			const channel_messages = await client.channels.cache.get(CHANNEL_ID).messages.fetch({limit:100});
+			// fetch all messages in channel
+			const channel_messages_collection = await client.channels.cache.get(CHANNEL_ID).messages.fetch({limit:100});
+			const channel_messages = channel_messages_collection.toJSON();
 			let reply = "";
 			
-			for (const channel_message of channel_messages.toJSON()) {
-				console.log(channel_message);
+			// iterate all messages in channel
+			for (const channel_message of channel_messages) {
 				if (!channel_message.components) continue;
+				// iterate all components in message
 				for (const message_component of channel_message.components) {
+					// check if component has a select menu and select menu matches customId
 					if (message_component.components.length > 0 && message_component.components[0].customId == 'genshinMainRoleGiver-Teyvat') {
+						// edit message with updated action row
 						channel_message.edit({components:ACTIONROW_1});
 						reply += "+Successfully Updated ACTIONROW_1\n";
 						continue;
