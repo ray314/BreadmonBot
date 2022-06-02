@@ -243,7 +243,7 @@ const Khaenriah = [
 
 module.exports.Create = function (client) {
 	client.on('ready', () => {
-		client.channels.fetch('925162470107123752').then(channel => {
+		client.channels.fetch('925168032274350130').then(channel => {
 			if (channel) {
 				let EMBED = new MessageEmbed()
 					.setColor('#eb7b36')
