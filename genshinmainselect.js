@@ -199,7 +199,7 @@ const Inazuma = [
 		value: '981433039731195975'
 	}
 ];
-const Sneznaya = [
+const Snezhnaya = [
 	{
 		label: "Tartaglia",
 		value: '981432083073343538'
@@ -254,9 +254,9 @@ module.exports.Create = function (client) {
 				let MondstadtSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Mondstadt').setPlaceholder('Mondstadt').setMinValues(0).setMaxValues(1).addOptions(Mondstadt);
 				let LiyueSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Liyue').setPlaceholder('Liyue').setMinValues(0).setMaxValues(1).addOptions(Liyue);
 				let InazumaSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Inazuma').setPlaceholder('Inazuma').setMinValues(0).setMaxValues(1).addOptions(Inazuma);
-				let SneznayaSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sneznaya').setPlaceholder('Sheznaya').setMinValues(0).setMaxValues(1).addOptions(Sneznaya);
+				let SnezhnayaSelect = new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Snezhnaya').setPlaceholder('Snezhnaya').setMinValues(0).setMaxValues(1).addOptions(Snezhnaya);
 				
-				channel.send({embeds:[EMBED],components:[new MessageActionRow().addComponents(TeyvatSelect), new MessageActionRow().addComponents(MondstadtSelect), new MessageActionRow().addComponents(LiyueSelect), new MessageActionRow().addComponents(InazumaSelect), new MessageActionRow().addComponents(SneznayaSelect)]}); 
+				channel.send({embeds:[EMBED],components:[new MessageActionRow().addComponents(TeyvatSelect), new MessageActionRow().addComponents(MondstadtSelect), new MessageActionRow().addComponents(LiyueSelect), new MessageActionRow().addComponents(InazumaSelect), new MessageActionRow().addComponents(SnezhnayaSelect)]}); 
 
 				// STEP 2: The other 4 menus will have to go into another message. To add a region uncomment the Select variable, then uncomment the channel.send call and whichever regions to be sent.
 				// This adds the select menu component to the message which gets sent.
@@ -313,7 +313,7 @@ module.exports.Create = function (client) {
 			}
 		}
 
-		for (const roleOption of Sneznaya) {
+		for (const roleOption of Snezhnaya) {
 			if (memberRoles.has(roleOption.value) && !selectValues.includes(roleOption.value)) {
 				let role = await interaction.guild.roles.fetch(roleOption.value);
 				interaction.member.roles.remove(role);
