@@ -65,7 +65,7 @@ module.exports.Create = function (client) {
 	});
 	
 	client.on('interactionCreate', async (interaction) => {
-		if (!interaction.isMessageComponent() || !interaction.customId.includes('genshinMainRoleGiver')) return;
+		if (!(interaction.isMessageComponent() && interaction.customId.includes('genshinMainRoleGiver'))) return;
 
 		let memberRoles = interaction.member.roles.cache;
 		if (!memberRoles) return; 
