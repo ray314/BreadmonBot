@@ -129,7 +129,7 @@ const Liyue = [
 		value: '981432485328060429'
 	},
 	{
-		label: "Xinqiu",
+		label: "Xingqiu",
 		value: '981432530857263126'
 	},
 	{
@@ -183,7 +183,7 @@ const Inazuma = [
 		value: '981431245789597769'
 	},
 	{
-		label: "Sara",
+		label: "Kujou Sara",
 		value: '981431542272364574'
 	},
 	{
@@ -191,7 +191,7 @@ const Inazuma = [
 		value: '981431621217554433'
 	},
 	{
-		label: "Yae",
+		label: "Yae Miko",
 		value: '981432621647147019'
 	},
 	{
