@@ -203,10 +203,6 @@ const Sneznaya = [
 	{
 		label: "Tartaglia",
 		value: '981432083073343538'
-	},
-	{
-		label: "Tartaglia",
-		value: '981659899765354558'
 	}
 ];
 

@@ -2,6 +2,7 @@ require('dotenv').config();
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { Intents, Client } = require("discord.js");
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
+const port = process.env.PORT || 3000;
 const RoleSelect = require('./genshinmainselect.js');
 RoleSelect.Create(client);
 
@@ -11,3 +12,7 @@ client.on("ready", () => {
 });
 
 client.login(process.env.TOKEN);
+
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`)
+})
