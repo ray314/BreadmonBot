@@ -32,44 +32,47 @@ const ACTIONROW_2 = [
 module.exports.Create = function (client) {
 	client.on('messageCreate', (message) => {
 		const msg = message.content.toLowerCase();
+		if (!(msg === ".characterroles-send" || msg === ".characterroles-update")) return;
 		// Check to see if user has privledges
 		client.guilds.fetch(GUILD_ID).then(guild => {
 			guild.members.fetch(message.author.id).then(async member => {
 				if (!member) return;
 				const member_roles = member.roles.cache;
 				if (!(member_roles.has('925164302082662460') || member_roles.has('925163038712135700') || member_roles.has('925160493709131826'))) return;
-	
-				if (msg === ".characterroles-send") {
-					client.channels.cache.get(CHANNEL_ID).send({embeds:[EMBED],components:ACTIONROW_1});
-					//client.channels.cache.get(CHANNEL_ID).send({components:ACTIONROW_2});
-				} else if (msg === ".characterroles-update") {
-					// Searches through all messages and components in roles channel to find one that has matching SelectMenuIDs. Then it updates the components to the new configuration.
-					// fetch all messages in channel
-					const channel_messages_collection = await client.channels.cache.get(CHANNEL_ID).messages.fetch({limit:100});
-					const channel_messages = channel_messages_collection.toJSON();
-					let reply = "";
-					
-					// iterate all messages in channel
-					for (const channel_message of channel_messages) {
-						if (!channel_message.components) continue;
-						// iterate all components in message
-						for (const message_component of channel_message.components) {
-							// check if component has a select menu and select menu matches customId
-							if (message_component.components.length > 0 && message_component.components[0].customId == 'genshinMainRoleGiver-Teyvat') {
-								// edit message with updated action row
-								channel_message.edit({components:ACTIONROW_1});
-								reply += "+Successfully Updated ACTIONROW_1\n";
-								continue;
+				switch (msg) {
+					case ".characterroles-send":
+						client.channels.cache.get(CHANNEL_ID).send({embeds:[EMBED],components:ACTIONROW_1});
+						//client.channels.cache.get(CHANNEL_ID).send({components:ACTIONROW_2});
+						break;
+					case ".characterroles-update":
+						// Searches through all messages and components in roles channel to find one that has matching SelectMenuIDs. Then it updates the components to the new configuration.
+						// fetch all messages in channel
+						const channel_messages_collection = await client.channels.cache.get(CHANNEL_ID).messages.fetch({limit:100});
+						const channel_messages = channel_messages_collection.toJSON();
+						let reply = "";
+						
+						// iterate all messages in channel
+						for (const channel_message of channel_messages) {
+							if (!channel_message.components) continue;
+							// iterate all components in message
+							for (const message_component of channel_message.components) {
+								// check if component has a select menu and select menu matches customId
+								if (message_component.components.length > 0 && message_component.components[0].customId == 'genshinMainRoleGiver-Teyvat') {
+									// edit message with updated action row
+									channel_message.edit({components:ACTIONROW_1});
+									reply += "+Successfully Updated ACTIONROW_1\n";
+									continue;
+								}
+								/*if (message_component.customId == 'genshinMainRoleGiver-Sumeru') {
+									channel_message.edit({components:ACTIONROW_2});
+									reply += "+Successfully Updated ACTIONROW_2\n";
+									continue;
+								}*/
 							}
-							/*if (message_component.customId == 'genshinMainRoleGiver-Sumeru') {
-								channel_message.edit({components:ACTIONROW_2});
-								reply += "+Successfully Updated ACTIONROW_2\n";
-								continue;
-							}*/
 						}
-					}
-					if (reply == "") reply = "Failed to update character role selection. Please use `.characterroles-send` to create a new message.";
-					message.reply({content:reply});
+						if (reply == "") reply = "Failed to update character role selection. Please use `.characterroles-send` to create a new message.";
+						message.reply({content:reply});
+						break;
 				}
 			}).catch(error => {
 				console.log(error);
