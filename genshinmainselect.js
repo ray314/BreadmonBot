@@ -1,5 +1,6 @@
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const CHANNEL_ID = '925168032274350130';
+const GUILD_ID = '925159676193173534';
 const ROLES = require('./roles.json').CHARACTER_ROLES;
 
 // Embed for Character roles
@@ -31,8 +32,12 @@ const ACTIONROW_2 = [
 module.exports.Create = function (client) {
 	client.on('messageCreate', async (message) => {
 		const msg = message.content.toLowerCase();
-		// Check to see if user has privledges 
-		if (!(message.member.roles.cache.has('925164302082662460') || message.member.roles.cache.has('925163038712135700') || message.member.roles.cache.has('925160493709131826'))) return;
+		// Check to see if user has privledges
+		const guild = await client.guilds.fetch(GUILD_ID);
+		const member = await guild.members.fetch(message.author.id);
+		if (!member) return;
+		const member_roles = member.roles.cache;
+		if (!(member_roles.has('925164302082662460') || member_roles.has('925163038712135700') || member_roles.has('925160493709131826'))) return;
 
 		if (msg === ".characterroles-send") {
 			client.channels.cache.get(CHANNEL_ID).send({embeds:[EMBED],components:ACTIONROW_1});
