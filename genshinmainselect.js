@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 const CHANNEL_ID = '925168032274350130';
 const GUILD_ID = '925159676193173534';
 const ROLES = require('./roles.json').CHARACTER_ROLES;
