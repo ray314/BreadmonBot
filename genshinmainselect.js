@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 const CHANNEL_ID = '925168032274350130';
 const GUILD_ID = '925159676193173534';
 const ROLES = require('./roles.json').CHARACTER_ROLES;
@@ -19,15 +19,17 @@ new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshi
 new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Snezhnaya').setPlaceholder('Snezhnaya').setMinValues(0).setMaxValues(1).addOptions(ROLES.Snezhnaya))];
 
 
+
 // Action row for Character roles select menus (sumeru - khaenriah)
-/*
+
 const ACTIONROW_2 = [
 //new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sumeru').setPlaceholder('Sumeru').setMinValues(0).setMaxValues(1).addOptions(Sumeru)),
 //new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Fontaine').setPlaceholder('Fontaine').setMinValues(0).setMaxValues(1).addOptions(Fontaine)),
 //new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Natlan').setPlaceholder('Natlan').setMinValues(0).setMaxValues(1).addOptions(Natlan)),
 //new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Khaenriah').setPlaceholder('Khaenri\'ah').setMinValues(0).setMaxValues(1).addOptions(Khaenriah))
-;
-*/
+new MessageActionRow().addComponents(new MessageButton().setCustomId('genshinMainRemoveRoles').setLabel('Remove').setStyle('DANGER'))
+];
+
 
 module.exports.Create = function (client) {
 	client.on('messageCreate', (message) => {
@@ -42,7 +44,7 @@ module.exports.Create = function (client) {
 				switch (msg) {
 					case ".characterroles-send":
 						client.channels.cache.get(CHANNEL_ID).send({embeds:[EMBED],components:ACTIONROW_1});
-						//client.channels.cache.get(CHANNEL_ID).send({components:ACTIONROW_2});
+						client.channels.cache.get(CHANNEL_ID).send({components:ACTIONROW_2});
 						break;
 					case ".characterroles-update":
 						// Searches through all messages and components in roles channel to find one that has matching SelectMenuIDs. Then it updates the components to the new configuration.
@@ -56,18 +58,24 @@ module.exports.Create = function (client) {
 							if (!channel_message.components) continue;
 							// iterate all components in message
 							for (const message_component of channel_message.components) {
-								// check if component has a select menu and select menu matches customId
-								if (message_component.components.length > 0 && message_component.components[0].customId == 'genshinMainRoleGiver-Teyvat') {
-									// edit message with updated action row
-									channel_message.edit({components:ACTIONROW_1});
-									reply += "+Successfully Updated ACTIONROW_1\n";
-									continue;
+								// iterate all components in action row
+								for (const action_component of message_component.components) {
+									// check if component has a select menu and select menu matches customId
+									if (action_component.customId == 'genshinMainRoleGiver-Teyvat') {
+										// edit message with updated action row
+										channel_message.edit({components:ACTIONROW_1});
+										reply += "+Successfully Updated ACTIONROW_1\n";
+										continue;
+									}
+
+									if (action_component.customId == 'genshinMainRemoveRoles') {
+										// edit message with updated action row
+										channel_message.edit({components:ACTIONROW_2});
+										reply += "+Successfully Updated ACTIONROW_2\n";
+										continue;
+									}
 								}
-								/*if (message_component.customId == 'genshinMainRoleGiver-Sumeru') {
-									channel_message.edit({components:ACTIONROW_2});
-									reply += "+Successfully Updated ACTIONROW_2\n";
-									continue;
-								}*/
+								
 							}
 						}
 						if (reply == "") reply = "Failed to update character role selection. Please use `.characterroles-send` to create a new message.";
@@ -83,43 +91,62 @@ module.exports.Create = function (client) {
 	});
 		
 		client.on('interactionCreate', async (interaction) => {
-			if (!(interaction.isMessageComponent() && interaction.customId.includes('genshinMainRoleGiver'))) return;
-
-			let memberRoles = interaction.member.roles.cache;
+			if (!interaction.isMessageComponent()) return;
+				let memberRoles = interaction.member.roles.cache;
+				if (!memberRoles) return; 
 			if (!memberRoles) return; 
-			let selectValues = interaction.values;
-			if (!selectValues) return;
-
-			// Iterate all character roles. If user has a character role that they unselected then remove that role.
-			for (const REGION in ROLES) {
-				for (const ROLE_OPTION of ROLES[REGION]) {
-					if (memberRoles.has(ROLE_OPTION.value) && !selectValues.includes(ROLE_OPTION.value)) {
-						let role = await interaction.guild.roles.fetch(ROLE_OPTION.value);
-						interaction.member.roles.remove(role);
+				if (!memberRoles) return; 
+			if (!memberRoles) return; 
+				if (!memberRoles) return; 
+			if (interaction.customId.includes('genshinMainRoleGiver')) {
+				let selectValues = interaction.values;
+				if (!selectValues) return;
+	
+				// Iterate all character roles. If user has a character role that they unselected then remove that role.
+				for (const REGION in ROLES) {
+					for (const ROLE_OPTION of ROLES[REGION]) {
+						if (memberRoles.has(ROLE_OPTION.value) && !selectValues.includes(ROLE_OPTION.value)) {
+							let role = await interaction.guild.roles.fetch(ROLE_OPTION.value);
+							interaction.member.roles.remove(role);
+						}
 					}
 				}
-			}
-
-			if (interaction.values.length < 1) {
+	
+				if (interaction.values.length < 1) {
+					if (interaction.replied) {
+						interaction.editReply({content:'Removed Character Icon', ephemeral:true});
+					} else {
+						interaction.reply({content:'Removed Character Icon', ephemeral:true});
+					}
+					return;
+				}
+	
+				// Add selected roles
+				for (const value of selectValues) {
+					let role = await interaction.guild.roles.fetch(value);
+					interaction.member.roles.add(role);
+				}
+	
+				if (interaction.replied) {
+					interaction.editReply({content:'Updated Character Icon', ephemeral:true});
+				} else {
+					interaction.reply({content:'Updated Character Icon', ephemeral:true});
+				}
+			} else if (interaction.customId == 'genshinMainRemoveRoles') {
+				for (const REGION in ROLES) {
+					for (const ROLE_OPTION of ROLES[REGION]) {
+						if (memberRoles.has(ROLE_OPTION.value)) {
+							let role = await interaction.guild.roles.fetch(ROLE_OPTION.value);
+							interaction.member.roles.remove(role);
+						}
+					}
+				}
+				
 				if (interaction.replied) {
 					interaction.editReply({content:'Removed Character Icon', ephemeral:true});
 				} else {
 					interaction.reply({content:'Removed Character Icon', ephemeral:true});
 				}
-				return;
-			}
-
-			// Add selected roles
-			for (const value of selectValues) {
-				let role = await interaction.guild.roles.fetch(value);
-				interaction.member.roles.add(role);
-			}
-
-			if (interaction.replied) {
-				interaction.editReply({content:'Updated Character Icon', ephemeral:true});
-			} else {
-				interaction.reply({content:'Updated Character Icon', ephemeral:true});
 			}
 	});
 }
-
