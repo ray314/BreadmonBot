@@ -10,26 +10,39 @@ const EMBED = new MessageEmbed()
 .setDescription('Choose a Genshin character to display next to your name.')
 .setThumbnail('https://cdn.discordapp.com/attachments/925162470107123752/981845568567513099/Icon_Emoji_054_Ganyu_No_touching21.png');
 
+const actionrow_1_regions = ['Teyvat', 'Mondstadt', 'Liyue', 'Inazuma', 'Sumeru'];
+const actionrow_2_regions = ['Snezhnaya'];
 // Action row for Character roles select menus (teyvat - snezhnaya)
-const ACTIONROW_1 = [
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Teyvat').setPlaceholder('Teyvat').setMinValues(0).setMaxValues(1).addOptions(ROLES.Teyvat)),
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Mondstadt').setPlaceholder('Mondstadt').setMinValues(0).setMaxValues(1).addOptions(ROLES.Mondstadt)),
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Liyue').setPlaceholder('Liyue').setMinValues(0).setMaxValues(1).addOptions(ROLES.Liyue)),
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Inazuma').setPlaceholder('Inazuma').setMinValues(0).setMaxValues(1).addOptions(ROLES.Inazuma)),
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Snezhnaya').setPlaceholder('Snezhnaya').setMinValues(0).setMaxValues(1).addOptions(ROLES.Snezhnaya)),
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sumeru').setPlaceholder('Sumeru').setMinValues(0).setMaxValues(1).addOptions(ROLES.Sumeru))];
+const ACTIONROW_1 = (function() {
+	let actionrow1 = [];
+	for (let key of actionrow_1_regions) {
+		actionrow1.push(initRegionSelect(key));
+	}
+	
+	return actionrow1;	
+})();
 
+const ACTIONROW_2 = (function() {
+	let actionrow2 = [];
+	for (let key of actionrow_2_regions) {
+		actionrow2.push(initRegionSelect(key));
+	}
+	actionrow2.push(new MessageActionRow()
+	.addComponents(new MessageButton()
+	.setCustomId('genshinMainRemoveRoles')
+	.setLabel('Remove')
+	.setStyle('DANGER')));
+	return actionrow2;	
+})();
 
-
-// Action row for Character roles select menus (sumeru - khaenriah)
-
-const ACTIONROW_2 = [
-//new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sumeru').setPlaceholder('Sumeru').setMinValues(0).setMaxValues(1).addOptions(Sumeru)),
-//new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Fontaine').setPlaceholder('Fontaine').setMinValues(0).setMaxValues(1).addOptions(Fontaine)),
-//new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Natlan').setPlaceholder('Natlan').setMinValues(0).setMaxValues(1).addOptions(Natlan)),
-//new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Khaenriah').setPlaceholder('Khaenri\'ah').setMinValues(0).setMaxValues(1).addOptions(Khaenriah))
-new MessageActionRow().addComponents(new MessageButton().setCustomId('genshinMainRemoveRoles').setLabel('Remove').setStyle('DANGER'))
-];
+function initRegionSelect(region) {
+	return new MessageActionRow()
+	.addComponents(new MessageSelectMenu().setCustomId(`genshinMainRoleGiver-${region}`)
+	.setPlaceholder(region)
+	.setMinValues(0)
+	.setMaxValues(1)
+	.addOptions(ROLES[region]));
+}
 
 
 module.exports.Create = function (client) {
