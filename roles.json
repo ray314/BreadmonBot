@@ -219,7 +219,26 @@
             }
         ],
         "Sumeru": [
-
+            {
+                "label": "Candace",
+                "value": ""
+            },
+            {
+                "label": "Collei",
+                "value": ""
+            },
+            {
+                "label": "Nahida",
+                "value": ""
+            },
+            {
+                "label": "Nilou",
+                "value": ""
+            },
+            {
+                "label": "Tighnari",
+                "value": ""
+            }
         ],
         "Fontaine": [
 
