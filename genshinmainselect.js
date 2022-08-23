@@ -16,7 +16,8 @@ new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshi
 new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Mondstadt').setPlaceholder('Mondstadt').setMinValues(0).setMaxValues(1).addOptions(ROLES.Mondstadt)),
 new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Liyue').setPlaceholder('Liyue').setMinValues(0).setMaxValues(1).addOptions(ROLES.Liyue)),
 new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Inazuma').setPlaceholder('Inazuma').setMinValues(0).setMaxValues(1).addOptions(ROLES.Inazuma)),
-new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Snezhnaya').setPlaceholder('Snezhnaya').setMinValues(0).setMaxValues(1).addOptions(ROLES.Snezhnaya))];
+new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Snezhnaya').setPlaceholder('Snezhnaya').setMinValues(0).setMaxValues(1).addOptions(ROLES.Snezhnaya)),
+new MessageActionRow().addComponents(new MessageSelectMenu().setCustomId('genshinMainRoleGiver-Sumeru').setPlaceholder('Sumeru').setMinValues(0).setMaxValues(1).addOptions(ROLES.Sumeru))];
 
 
 
