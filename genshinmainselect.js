@@ -1,10 +1,12 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
+const { ActionRowBuilder, SelectMenuBuilder, ButtonBuilder, EmbedBuilder, ActionRow,
+		InteractionType,
+		ButtonStyle,  } = require('discord.js');
 const CHANNEL_ID = '925168032274350130';
 const GUILD_ID = '925159676193173534';
 const ROLES = require('./roles.json').CHARACTER_ROLES;
 
 // Embed for Character roles
-const EMBED = new MessageEmbed()
+const EMBED = new EmbedBuilder()
 .setColor('#eb7b36')
 .setTitle('(Optional) Character roles.')
 .setDescription('Choose a Genshin character to display next to your name.')
@@ -27,17 +29,17 @@ const ACTIONROW_2 = (function() {
 	for (let key of actionrow_2_regions) {
 		actionrow2.push(initRegionSelect(key));
 	}
-	actionrow2.push(new MessageActionRow()
-	.addComponents(new MessageButton()
+	actionrow2.push(new ActionRowBuilder()
+	.addComponents(new ButtonBuilder()
 	.setCustomId('genshinMainRemoveRoles')
 	.setLabel('Remove')
-	.setStyle('DANGER')));
+	.setStyle(ButtonStyle.Danger)));
 	return actionrow2;	
 })();
 
 function initRegionSelect(region) {
-	return new MessageActionRow()
-	.addComponents(new MessageSelectMenu().setCustomId(`genshinMainRoleGiver-${region}`)
+	return new ActionRowBuilder()
+	.addComponents(new SelectMenuBuilder().setCustomId(`genshinMainRoleGiver-${region}`)
 	.setPlaceholder(region)
 	.setMinValues(0)
 	.setMaxValues(1)
@@ -105,7 +107,7 @@ module.exports.Create = function (client) {
 	});
 		
 		client.on('interactionCreate', async (interaction) => {
-			if (!interaction.isMessageComponent()) return;
+			if (!interaction.type === InteractionType.MessageComponent) return;
 				let memberRoles = interaction.member.roles.cache;
 				if (!memberRoles) return; 
 			if (!memberRoles) return; 
